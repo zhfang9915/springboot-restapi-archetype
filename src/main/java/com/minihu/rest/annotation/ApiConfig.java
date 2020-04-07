@@ -20,7 +20,7 @@ import java.util.Arrays;
  * @Date: 2020/4/7 10:55
  */
 @Configuration
-public class ApiConfig implements WebMvcConfigurer/*, WebMvcRegistrations */{
+public class ApiConfig implements WebMvcConfigurer, WebMvcRegistrations{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -30,29 +30,14 @@ public class ApiConfig implements WebMvcConfigurer/*, WebMvcRegistrations */{
                 .excludePathPatterns(Arrays.asList("/webjars/**", "/swagger-ui.html"));
     }
 
-//    /**
-//     * 注册自定义的 RequestMappingHandlerMapping
-//     * 不可通过WebMvcConfigurationSupport来注册自定义RequestMappingHandlerMapping，否则所有自定义interceptors全部失效
-//     * 方法getRequestMappingHandlerMapping() 也不能添加@Bean注解，否则同样会使所有自定义interceptors全部失效
-//     */
-////    @Override
-//////    @Bean
-////    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-////        RequestMappingHandlerMapping handlerMapping = new ApiVersionRequestHandlerMapping();
-////        return handlerMapping;
-////    }
-//    @Bean
-//    @Primary
-//    public RequestMappingHandlerMapping requestMappingHandlerMapping(
-//            @Qualifier("mvcContentNegotiationManager") ContentNegotiationManager contentNegotiationManager,
-//            @Qualifier("mvcConversionService") FormattingConversionService conversionService,
-//            @Qualifier("mvcResourceUrlProvider") ResourceUrlProvider resourceUrlProvider) {
-//        // Must be @Primary for MvcUriComponentsBuilder to work
-//        RequestMappingHandlerMapping mapping = new ApiVersionRequestHandlerMapping();
-//        mapping.setOrder(0);
-//        mapping.setInterceptors(getInterceptors(conversionService, resourceUrlProvider));
-//        return super.requestMappingHandlerMapping(contentNegotiationManager, conversionService,
-//                resourceUrlProvider);
-//    }
+    /**
+     * 注册自定义的 RequestMappingHandlerMapping
+     * 不可通过WebMvcConfigurationSupport来注册自定义RequestMappingHandlerMapping，否则所有自定义interceptors全部失效
+     * 方法getRequestMappingHandlerMapping() 也不能添加@Bean注解，否则同样会使所有自定义interceptors全部失效
+     */
+    @Override
+    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
+        return new ApiVersionRequestHandlerMapping();
+    }
 
 }
